@@ -1,0 +1,1101 @@
+/* =========================================================
+   HIGHLANDS AI SOLUTIONS — interactive web deck
+   Concept C: FIELD & SKY (approved Phase B direction)
+   Night navy fields for story / purpose / proof / close.
+   Daylight chapters for the six products.
+   Long gradient dissolves between; the logo's diamond as the
+   recurring motif (aperture, markers, rail).
+   Type: Bricolage Grotesque display + one Fraunces italic word
+   per headline + Inter body.
+   ========================================================= */
+
+:root {
+  /* Surfaces */
+  --night: #0A1526;
+  --night-deep: #060D18;
+  --day: #F5F8FA;
+  --day-2: #FFFFFF;
+
+  /* Text on day */
+  --ink: #132238;
+  --ink-soft: #44546B;
+  --day-faint: #7C8BA0;
+
+  /* Text on night */
+  --night-ink: #F4F8FB;
+  --night-body: #A4B2C4;
+  --night-dim: #5E6E84;
+
+  /* Brand */
+  --teal: #0EB9A6;
+  --teal-bright: #2BD3BE;
+
+  /* Lines */
+  --rule-night: rgba(244, 248, 251, 0.09);
+  --rule-night-strong: rgba(244, 248, 251, 0.16);
+  --rule-day: rgba(19, 34, 56, 0.12);
+  --rule-day-strong: rgba(19, 34, 56, 0.2);
+
+  --shadow-bezel-day: 0 40px 90px rgba(19, 34, 56, 0.16);
+  --shadow-bezel-night: 0 40px 100px rgba(0, 0, 0, 0.55);
+
+  --radius: 16px;
+  --radius-lg: 24px;
+
+  --wrap: min(1240px, calc(100vw - 3rem));
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --disp: "Bricolage Grotesque", -apple-system, sans-serif;
+  --accent-italic: "Fraunces", Georgia, serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+button, input, select, textarea { font: inherit; }
+
+html {
+  scroll-behavior: smooth;
+  /* No CSS snap: the deck feel comes from sticky stacking (each panel pins
+     and the next slides over it); snap would fight the pin. */
+  /* No browser scroll anchoring either: reveal animations translate elements
+     and anchoring "corrects" the viewport mid-scroll (read as random jumps) */
+  overflow-anchor: none;
+}
+body {
+  margin: 0;
+  overflow-x: hidden;
+  font-family: var(--sans);
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  background: var(--night);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; transition: color 200ms var(--ease); }
+img, video { max-width: 100%; display: block; }
+.wrap { width: var(--wrap); margin: 0 auto; }
+
+h1, h2, h3, h4 { margin: 0; }
+h1, h2 {
+  font-family: var(--disp);
+  font-weight: 500;
+  letter-spacing: -0.028em;
+  line-height: 1.05;
+}
+h1 { font-size: clamp(46px, 5.6vw, 86px); }
+h2 { font-size: clamp(36px, 4.4vw, 64px); }
+h3 { font-family: var(--disp); font-size: 1.15rem; font-weight: 600; letter-spacing: -0.015em; }
+h4 { font-family: var(--disp); font-size: 1.05rem; font-weight: 600; letter-spacing: -0.012em; }
+
+/* One Fraunces italic word per headline: the second voice */
+em.voice {
+  font-family: var(--accent-italic);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--teal);
+}
+/* House rule: teal on a dark field always carries a soft glow */
+.panel.night em.voice,
+.panel.night-deep em.voice,
+.panel.night .stat-num,
+.panel.night .tl-year,
+.panel.night .num,
+.panel.night-deep .num,
+.case-panel .num,
+.panel.night .proof-product,
+.panel.night .chapter-label,
+.panel.night-deep .chapter-label {
+  text-shadow: 0 0 26px rgba(43, 211, 190, 0.38);
+}
+.panel.night .dmark,
+.panel.night-deep .dmark {
+  box-shadow: 0 0 12px rgba(14, 185, 166, 0.55);
+}
+
+p { margin: 0; }
+.lede { font-size: 18.5px; max-width: 56ch; margin-top: 22px; }
+.lede b, .story b { font-weight: 600; }
+
+/* The diamond: brand geometry, used everywhere a dot would be */
+.dmark {
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: var(--teal);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+.chapter-label {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 12.5px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--teal);
+  margin: 0 0 22px;
+}
+
+/* =========================================================
+   SURFACES + SEAMS
+   ========================================================= */
+.panel {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 7.5rem 0 5rem;
+  /* own stacking context so the ::before watermark sits above the panel
+     background but under the content in every mode */
+  isolation: isolate;
+}
+/* Day slides carry the diamond mark as a whisper-faint backdrop so the
+   light field never reads as plain */
+.panel.day::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  right: -6%;
+  top: 50%;
+  width: min(64vh, 46vw);
+  aspect-ratio: 1200 / 875;
+  transform: translateY(-50%);
+  background: url('assets/logo-mark.png') center / contain no-repeat;
+  opacity: 0.05;
+  pointer-events: none;
+}
+/* Night chapters get the same mark as a white ghost (the hero keeps its
+   own OPERATORS watermark instead) */
+.panel.night:not(.panel-hero)::before,
+.panel.night-deep:not(.panel-cta)::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  right: -6%;
+  top: 50%;
+  width: min(64vh, 46vw);
+  aspect-ratio: 1200 / 875;
+  transform: translateY(-50%);
+  background: url('assets/logo-mark-light.png') center / contain no-repeat;
+  opacity: 0.03;
+  pointer-events: none;
+}
+/* SLIDE ENGINE (class set by JS on ≥961px screens; no-JS and mobile keep
+   the native scrolling flow above). The deck is a fixed, full-viewport
+   stack: only the current slide (and, mid-transition, its neighbor) is
+   visible. The incoming slide covers with a rounded top edge and shadow
+   while the covered one recedes under a dimming veil. */
+body.slides { overflow: hidden; height: 100dvh; }
+.slides .deck { position: fixed; inset: 0; }
+.slides .panel {
+  position: absolute;
+  inset: 0;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  padding: 96px 0 44px;
+}
+.slides .panel.s-show { visibility: visible; }
+.slides .seam { display: none; }
+/* the moving slide while a transition runs (rides in from the right) */
+.slides .panel.s-cover {
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  box-shadow: -28px 0 70px rgba(3, 8, 15, 0.45);
+}
+/* The covered slide dims under a shade veil (its own opacity must never
+   drop, or slides beneath bleed through). --veil is driven by the
+   transition in script.js. */
+.slides .panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  background: #081019;
+  opacity: var(--veil, 0);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Slide-mode compaction: every chapter is one viewport, so vertical
+   rhythm tightens and media is sized from the viewport HEIGHT. Whatever
+   still overflows is scaled to fit by fitSlides() in script.js. */
+.slides h2 { font-size: clamp(32px, 3.6vw, 54px); }
+.slides .lede { margin-top: 14px; }
+.slides .chapter-label { margin-bottom: 14px; }
+.slides .timeline { margin-top: 36px; }
+.slides .stat-row { margin-top: 36px; padding-top: 24px; }
+.slides .problem-grid { margin-top: 36px; }
+.slides .index-list { margin-top: 28px; }
+.slides .index-list a { padding: 15px 6px; }
+.slides .journey { margin-top: 30px; }
+.slides .stage { margin-top: 24px; }
+.slides .stage-cap, .slides .stage .stage-cap, .slides .stage-pair + .stage-cap { margin-top: 12px; }
+.slides .case-panel { margin-top: 24px; padding: 28px 44px; }
+.slides .case-panel .story { font-size: 17px; }
+.slides .num { font-size: clamp(52px, 5.5vw, 92px); }
+.slides .proof-item .num { font-size: clamp(56px, 6.2vw, 96px); }
+.slides .trio { margin-top: 26px; gap: 32px; }
+.slides .proof-row { margin-top: 44px; }
+.slides .roadmap-list { margin-top: 36px; }
+.slides .learn-link { margin-top: 16px; }
+.slides .stage > .bezel { width: fit-content; max-width: 100%; }
+.slides .bezel > img {
+  width: auto;
+  max-width: 100%;
+  max-height: 40vh;
+  margin: 0 auto;
+}
+.slides .stage-pair .bezel > img { max-height: 34vh; }
+/* Flow slides go wide: more room for the screen, narrower rail */
+.slides #community-assistant .wrap,
+.slides #snapsign .wrap,
+.slides #workflow360 .wrap,
+.slides #marketing .wrap,
+.slides #staffguard .wrap { width: min(1370px, calc(100vw - 3.5rem)); }
+/* Immersive two-column: vertical journey rail, screen fills the rest */
+.slides .ca-grid {
+  grid-template-columns: minmax(300px, 350px) 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.slides .ca-left h2 { font-size: clamp(26px, 2.3vw, 34px); }
+.slides .ca-left .lede { font-size: 15px; margin-top: 8px; }
+.slides .ca-left .journey {
+  grid-template-columns: 1fr;
+  gap: 11px;
+  margin-top: 20px;
+}
+.slides .ca-left .journey::before {
+  top: 8px; bottom: 8px; left: 4px; right: auto;
+  width: 1px; height: auto;
+  transform: scaleY(var(--draw, 1));
+  transform-origin: center top;
+}
+.slides .ca-left .j-step { padding: 0 0 0 26px; }
+.slides .ca-left .j-step::before { top: 5px; }
+.slides .ca-left .j-step h4 { font-size: 0.92rem; margin: 2px 0 1px; }
+.slides .ca-left .j-step p { font-size: 0.78rem; line-height: 1.35; }
+.slides .flow-band { margin-top: 12px; padding-top: 10px; }
+.slides .fb-copy p { font-size: 13px; }
+.slides .fb-copy .learn-link { margin-top: 6px; }
+.slides .ca-cap { margin-top: 14px; }
+.slides .ca-stage { margin-top: 0; width: 100%; }
+.slides .ca-stage > .bezel { width: 100%; max-width: none; }
+.slides .ca-frames { height: auto; width: 100%; }
+/* the caption spans the slide's full width below both columns */
+.ca-cap { margin-top: 22px; }
+.slides .ca-cap { margin-top: 26px; font-size: 12.5px; }
+.slides .phone img { max-width: none; max-height: 45vh; width: auto; margin: 0 auto; }
+.slides .vc-chart { width: min(310px, 100%); padding: 11px 13px 8px; }
+.slides .vc-chart .vc-latest b { font-size: 13.5px; }
+.panel.day {
+  background: var(--day);
+  color: var(--ink-soft);
+}
+.panel.day h1, .panel.day h2, .panel.day h3, .panel.day h4 { color: var(--ink); }
+.panel.day .lede b { color: var(--ink); }
+
+.panel.night, .panel.night-deep { color: var(--night-body); }
+.panel.night h1, .panel.night h2, .panel.night h3, .panel.night h4,
+.panel.night-deep h1, .panel.night-deep h2 { color: var(--night-ink); }
+.panel.night .lede b { color: var(--night-ink); }
+.panel.night em.voice, .panel.night-deep em.voice { color: var(--teal-bright); }
+.panel.night {
+  background:
+    radial-gradient(ellipse 70% 55% at 20% 25%, rgba(14, 185, 166, 0.06), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 85%, rgba(38, 84, 136, 0.12), transparent 65%),
+    var(--night);
+}
+.panel.night-deep {
+  background:
+    radial-gradient(ellipse 65% 55% at 50% 45%, rgba(14, 185, 166, 0.05), transparent 62%),
+    var(--night-deep);
+}
+
+/* Night into day and back: long dissolves that ride over the pinned panel */
+.seam {
+  height: 34vh;
+}
+.seam-dawn {
+  background: linear-gradient(180deg, var(--night-deep) 0%, #2E4258 36%, #93A9B8 70%, var(--day) 100%);
+}
+.seam-dusk {
+  background: linear-gradient(180deg, var(--day) 0%, #93A9B8 28%, #2E4258 62%, var(--night) 100%);
+}
+
+/* =========================================================
+   MAST + RAIL + PROGRESS
+   ========================================================= */
+.mast {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 28px;
+  pointer-events: none;
+}
+.mast a { pointer-events: auto; }
+.chip {
+  display: inline-flex;
+  background: #fff;
+  border-radius: 10px;
+  padding: 7px 13px;
+  box-shadow: 0 4px 18px rgba(6, 13, 24, 0.28);
+}
+.chip img { height: 26px; width: auto; }
+.demo-pill {
+  font-family: var(--disp);
+  font-size: 14px; font-weight: 600;
+  color: #fff;
+  background: var(--teal);
+  border-radius: 999px;
+  padding: 10px 20px;
+  box-shadow: 0 8px 24px rgba(14, 185, 166, 0.3);
+  transition: transform 240ms var(--ease), box-shadow 240ms var(--ease);
+}
+.demo-pill:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(14, 185, 166, 0.4); }
+
+.rail {
+  position: fixed;
+  left: 1.15rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+}
+.rail ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+.rail a { display: flex; align-items: center; gap: 0.65rem; padding: 2px; }
+.rail-diamond {
+  width: 7px; height: 7px;
+  transform: rotate(45deg);
+  background: transparent;
+  border: 1.5px solid var(--night-dim);
+  transition: background 240ms var(--ease), border-color 240ms var(--ease), transform 240ms var(--ease), box-shadow 240ms var(--ease);
+  flex-shrink: 0;
+}
+.deck-on-day .rail-diamond { border-color: rgba(19, 34, 56, 0.35); }
+.rail a:hover .rail-diamond { border-color: var(--teal); }
+.rail a.is-active .rail-diamond {
+  background: var(--teal);
+  border-color: var(--teal);
+  transform: rotate(45deg) scale(1.3);
+  box-shadow: 0 0 12px rgba(14, 185, 166, 0.5);
+}
+.rail-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--night-ink);
+  background: rgba(10, 21, 38, 0.9);
+  border: 1px solid var(--rule-night);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-4px);
+  pointer-events: none;
+  transition: opacity 200ms var(--ease), transform 200ms var(--ease);
+}
+.rail a:hover .rail-label { opacity: 1; transform: translateX(0); }
+
+.progress-bar {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px;
+  z-index: 60;
+}
+.progress-bar span {
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--teal), var(--teal-bright));
+}
+
+/* =========================================================
+   1. HERO
+   ========================================================= */
+.panel-hero { overflow: hidden; }
+.watermark {
+  position: absolute;
+  left: 50%; top: 44%;
+  transform: translate(-50%, -50%);
+  font-family: var(--disp);
+  font-weight: 600;
+  font-size: clamp(150px, 23vw, 350px);
+  letter-spacing: -0.02em;
+  color: rgba(244, 248, 251, 0.026);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+.hero-grid {
+  position: relative; z-index: 2;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 64px;
+  align-items: center;
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 12.5px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--teal-bright);
+  margin: 0 0 24px;
+}
+.hero-copy h1 { max-width: 15ch; }
+.hero-copy .sub {
+  margin-top: 28px;
+  font-size: 18.5px;
+  max-width: 44ch;
+}
+.hero-copy .sub b { color: var(--night-ink); font-weight: 500; }
+
+/* Hero media: the Our Story film shown FULL FRAME (no diamond crop);
+   rotated echo rings behind carry the diamond motif instead. */
+.hero-media {
+  position: relative;
+  justify-self: end;
+  width: 100%;
+}
+.hero-media video {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(14, 185, 166, 0.22);
+  box-shadow: var(--shadow-bezel-night), 0 0 70px rgba(14, 185, 166, 0.14);
+  background: var(--night-deep);
+}
+.aperture-echo {
+  position: absolute;
+  width: 44%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(14, 185, 166, 0.28);
+  border-radius: 22px;
+  pointer-events: none;
+  animation: echo-breathe 5s var(--ease) infinite alternate;
+}
+.echo-a { right: -7%; top: -18%; }
+.echo-b { left: -9%; bottom: -20%; width: 30%; border-radius: 14px; animation-delay: 1.4s; }
+@keyframes echo-breathe {
+  0%   { transform: rotate(45deg) scale(1); opacity: 1; }
+  100% { transform: rotate(45deg) scale(1.07); opacity: 0.5; }
+}
+/* SplitText line masks (added by JS); keeps lines clipped during reveals */
+.split-mask .line-mask { overflow: hidden; }
+.cue {
+  position: absolute; bottom: 30px; left: 28px;
+  z-index: 2;
+  font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--night-dim);
+}
+.cue:hover { color: var(--teal-bright); }
+
+/* =========================================================
+   2. STORY
+   ========================================================= */
+.timeline {
+  list-style: none;
+  margin: 64px 0 0; padding: 26px 0 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 4px; left: 5px; right: 20%;
+  height: 1px;
+  background: var(--rule-night-strong);
+  transform: scaleX(var(--draw, 1));
+  transform-origin: left center;
+}
+.tl-beat { position: relative; padding-top: 4px; }
+.tl-beat::before {
+  content: '';
+  position: absolute; top: -26px; left: 0;
+  width: 10px; height: 10px;
+  transform: rotate(45deg);
+  background: var(--night);
+  border: 1.5px solid var(--teal);
+}
+.tl-beat:last-child::before { background: var(--teal); }
+.tl-media {
+  margin: 0 0 14px;
+  border-radius: 14px;
+  border: 1px solid var(--rule-night);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+.tl-media video {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+}
+.tl-year {
+  display: block;
+  font-family: var(--disp);
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--teal-bright);
+  margin-bottom: 8px;
+}
+.tl-beat h3 { font-size: 1.05rem; margin-bottom: 7px; }
+.tl-beat p { font-size: 0.92rem; color: var(--night-body); line-height: 1.55; }
+
+.stat-row {
+  margin-top: 72px;
+  padding-top: 34px;
+  border-top: 1px solid var(--rule-night);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.stat { display: flex; flex-direction: column; gap: 6px; }
+.stat-num {
+  font-family: var(--disp);
+  font-weight: 600;
+  font-size: clamp(44px, 4.6vw, 68px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--teal-bright);
+}
+.stat-label { font-size: 0.9rem; color: var(--night-dim); max-width: 30ch; }
+
+/* =========================================================
+   3. THE PROBLEM
+   ========================================================= */
+/* Nine pain points on a 3x3 hairline grid: air between items, bright
+   body text, icon + group kicker heading each cell. */
+.problem-grid {
+  list-style: none;
+  margin: 48px 0 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 34px 56px;
+}
+.problem-grid li {
+  border-top: 1px solid var(--rule-night-strong);
+  padding-top: 18px;
+}
+.p-head {
+  display: flex; align-items: center; gap: 11px;
+  margin-bottom: 12px;
+}
+.p-kicker {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--teal-bright);
+  opacity: 0.85;
+}
+.problem-grid h4 { font-size: 1.06rem; margin-bottom: 7px; }
+.problem-grid p { font-size: 0.92rem; color: var(--night-body); line-height: 1.55; }
+/* line icons in the brand stroke style; teal on night carries the glow */
+.p-ico {
+  display: block;
+  flex-shrink: 0;
+  width: 21px; height: 21px;
+  color: var(--teal-bright);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 7px rgba(43, 211, 190, 0.45));
+}
+
+/* =========================================================
+   4. PURPOSE
+   ========================================================= */
+.panel-purpose { text-align: center; }
+.purpose-headline {
+  font-size: clamp(40px, 5vw, 76px);
+  line-height: 1.12;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.panel-purpose em.voice { text-shadow: 0 0 44px rgba(14, 185, 166, 0.3); }
+
+/* =========================================================
+   5. THE PLATFORM: index rows, not cards
+   ========================================================= */
+.index-list {
+  list-style: none;
+  margin: 56px 0 0; padding: 0;
+  counter-reset: none;
+  border-top: 1px solid var(--rule-day-strong);
+}
+.index-list a {
+  display: grid;
+  grid-template-columns: 64px 1.1fr 1.4fr 40px;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 6px;
+  border-bottom: 1px solid var(--rule-day);
+  transition: background 220ms var(--ease), padding 220ms var(--ease);
+}
+.index-list a:hover { background: var(--day-2); padding-left: 14px; }
+.idx-n {
+  font-family: var(--disp);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--teal);
+}
+.idx-name {
+  font-family: var(--disp);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.idx-line { font-size: 0.95rem; color: var(--day-faint); }
+.idx-arrow {
+  font-size: 1.1rem;
+  color: var(--teal);
+  justify-self: end;
+  transition: transform 220ms var(--ease);
+}
+.index-list a:hover .idx-arrow { transform: translateX(4px); }
+
+/* =========================================================
+   PRODUCT CHAPTERS (day)
+   ========================================================= */
+.panel.day .lede { color: var(--ink-soft); }
+
+/* Journey: diamond markers on a line (Community Assistant) */
+.journey {
+  margin: 64px 0 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 26px;
+}
+.journey::before {
+  content: '';
+  position: absolute;
+  top: 5px; left: 8px; right: 18%;
+  height: 1px;
+  background: var(--rule-day-strong);
+  transform: scaleX(var(--draw, 1));
+  transform-origin: left center;
+}
+.j-step {
+  position: relative;
+  padding-top: 26px;
+  /* journey steps are clickable (they drive the CA flow) */
+  border: none;
+  background: none;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  transition: opacity 300ms var(--ease);
+}
+.j-step::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 10px; height: 10px;
+  transform: rotate(45deg);
+  background: var(--day);
+  border: 1.5px solid var(--teal);
+}
+.j-step .n { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; color: var(--teal); }
+.j-step h4 { margin: 6px 0 4px; font-size: 1rem; }
+.j-step p { margin: 0; font-size: 0.87rem; color: var(--day-faint); line-height: 1.5; }
+/* The lit step: neon diamond + teal title while its screen is showing */
+.journey[id] .j-step { opacity: 0.55; }
+.journey[id] .j-step.active, .journey[id] .j-step:hover { opacity: 1; }
+.journey[id] .j-step.active::before {
+  background: var(--teal);
+  box-shadow: 0 0 14px rgba(14, 185, 166, 0.85), 0 0 4px rgba(14, 185, 166, 0.9);
+}
+.journey[id] .j-step.active h4 { color: var(--teal); }
+
+/* CA flow screen: five stacked frames crossfading per step.
+   All five frames are authored at exactly 16:10, so cover never crops. */
+.ca-frames {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #fff;
+}
+.ca-frames img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #fff;
+  opacity: 0;
+}
+.ca-frames img[data-frame="0"] { opacity: 1; }
+
+/* CA layout: copy + journey rail left, the big screen right (the grid
+   collapses to one column outside slide mode / on mobile) */
+.ca-grid { display: grid; gap: 44px; }
+/* SnapSign screens render at the same 16:10 as CA's frames */
+.ss-frames { aspect-ratio: 1500 / 938; }
+/* Workflow 360 sources vary in shape: letterbox them onto the app's own
+   dark field, in the same 16:10 frame as the other flows */
+.wf-frames { aspect-ratio: 16 / 10; background: #0F1113; }
+.wf-frames img { object-fit: contain; background: #0F1113; }
+/* Marketing frames: light sources at (or near) 16:10 */
+.mk-frames { aspect-ratio: 16 / 10; }
+.mk-frames img { object-fit: contain; background: #fff; }
+/* StaffGuard frames: live app captures on the app's own light field */
+.sg-frames { aspect-ratio: 16 / 10; background: #F6F8FA; }
+.sg-frames img { object-fit: contain; background: #F6F8FA; }
+/* Full-width case band under the screen: story + learn link left, the
+   big number right */
+.flow-band {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule-day-strong);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: center;
+}
+.fb-copy p { font-size: 14.5px; color: var(--ink-soft); max-width: 72ch; line-height: 1.55; }
+.fb-copy p b { color: var(--ink); font-weight: 600; }
+.fb-copy .learn-link { margin-top: 10px; font-size: 0.88rem; }
+.fb-num { text-align: right; }
+.fb-num .num { font-size: clamp(38px, 3.4vw, 56px); color: var(--teal); }
+.fb-per { font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+.fb-foot { font-size: 11px; color: var(--day-faint); margin-top: 2px; }
+
+/* Media as object: the browser bezel */
+.stage { position: relative; margin-top: 64px; }
+.bezel {
+  background: var(--day-2);
+  border: 1px solid var(--rule-day);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-bezel-day);
+}
+.stage > .bezel { width: 88%; }
+.bezel-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--rule-day);
+}
+.bezel-bar i { width: 9px; height: 9px; border-radius: 50%; background: rgba(19, 34, 56, 0.14); }
+.bezel-title {
+  margin-left: 10px;
+  font-size: 12px; color: var(--ink-soft);
+  background: var(--day);
+  border-radius: 6px; padding: 4px 12px;
+}
+.bezel img { width: 100%; }
+.stage-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.stage-pair .bezel { width: 100%; }
+.widget-obj {
+  position: absolute; right: 0; bottom: -46px;
+  width: 250px;
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--rule-day);
+  box-shadow: 0 30px 70px rgba(19, 34, 56, 0.28);
+}
+.widget-obj img { width: 100%; }
+.stage-cap { margin-top: 20px; font-size: 13px; color: var(--day-faint); }
+.stage .stage-cap { margin-top: 72px; }
+.stage-pair + .stage-cap { margin-top: 20px; }
+
+/* Trio: three quiet columns with hairlines (Workflow 360, Marketing) */
+.trio {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+.trio-item { border-top: 1px solid var(--rule-day-strong); padding-top: 16px; }
+.trio-item h4 { margin-bottom: 6px; font-size: 1rem; }
+.trio-item p { font-size: 0.9rem; color: var(--day-faint); line-height: 1.55; }
+
+/* Split layout (Vital Connect) */
+.product-split {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 56px;
+  align-items: center;
+}
+.product-copy .lede { margin-bottom: 26px; }
+.phone { margin: 0; }
+.phone img {
+  max-width: 290px;
+  margin: 0 auto;
+  filter: drop-shadow(0 40px 70px rgba(19, 34, 56, 0.3));
+}
+/* Phone above, portal chart below: two clean objects, no overlap */
+.vc-media { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.vc-chart {
+  width: min(380px, 100%);
+  background: var(--day-2);
+  border: 1px solid var(--rule-day);
+  border-radius: var(--radius);
+  box-shadow: 0 30px 70px rgba(19, 34, 56, 0.22);
+  padding: 14px 16px 10px;
+}
+.vc-chart-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.vc-tabs { display: flex; gap: 4px; }
+.vc-tabs span {
+  font-size: 10px; font-weight: 600;
+  color: var(--day-faint);
+  border: 1px solid var(--rule-day);
+  border-radius: 6px;
+  padding: 2px 7px;
+}
+.vc-tabs span.on { color: #fff; background: var(--teal); border-color: var(--teal); }
+.vc-latest { font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
+.vc-latest b { font-family: var(--disp); font-size: 15px; color: var(--ink); font-weight: 600; }
+.vc-stats { margin-top: 4px; font-size: 9.5px; color: var(--day-faint); }
+.vc-chart svg { display: block; width: 100%; height: auto; margin-top: 4px; }
+.dlist { list-style: none; padding: 0; margin: 0 0 26px; display: grid; gap: 10px; }
+.dlist li { position: relative; padding-left: 22px; font-size: 0.95rem; }
+.dlist li::before {
+  content: '';
+  position: absolute; left: 0; top: 8px;
+  width: 8px; height: 8px;
+  transform: rotate(45deg);
+  background: var(--teal);
+}
+.findings {
+  border-top: 1px solid var(--rule-day-strong);
+  border-bottom: 1px solid var(--rule-day);
+  padding: 18px 0;
+  margin-bottom: 26px;
+}
+.findings-title {
+  display: block;
+  font-size: 11.5px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 12px;
+}
+.findings ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.findings li { position: relative; padding-left: 20px; font-size: 0.92rem; }
+.findings li::before {
+  content: '';
+  position: absolute; left: 0; top: 7px;
+  width: 7px; height: 7px;
+  transform: rotate(45deg);
+  background: var(--teal);
+}
+.findings b { color: var(--ink); font-weight: 600; }
+
+/* Case panel: night returns inside the day */
+.case-panel {
+  margin-top: 110px;
+  background:
+    radial-gradient(ellipse 60% 70% at 80% 20%, rgba(14, 185, 166, 0.10), transparent 60%),
+    var(--night-deep);
+  border-radius: var(--radius-lg);
+  padding: 60px 64px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+.case-panel .story {
+  font-size: 19px; line-height: 1.6;
+  color: var(--night-body);
+  max-width: 40ch;
+}
+.case-panel .story b { color: var(--night-ink); font-weight: 500; }
+.numwrap { text-align: right; }
+.num {
+  font-family: var(--disp);
+  font-weight: 600;
+  font-size: clamp(70px, 8vw, 128px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--teal-bright);
+}
+.num-label { margin-top: 8px; font-size: 15px; color: var(--night-dim); }
+.num-foot { margin-top: 10px; font-size: 12.5px; color: var(--night-dim); opacity: 0.8; }
+
+.learn-link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  margin-top: 36px;
+  font-weight: 600;
+  font-size: 0.93rem;
+  color: var(--teal);
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+}
+.learn-link::after { content: '→'; transition: transform 240ms var(--ease); display: inline-block; }
+.learn-link:hover { border-bottom-color: var(--teal); }
+.learn-link:hover::after { transform: translateX(3px); }
+.product-copy .learn-link { margin-top: 0; }
+
+/* =========================================================
+   12. PROOF (night)
+   ========================================================= */
+.proof-row {
+  margin-top: 72px;
+  padding-top: 40px;
+  border-top: 1px solid var(--rule-night-strong);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+.proof-item { display: flex; flex-direction: column; gap: 6px; }
+.proof-item .num { font-size: clamp(56px, 6.2vw, 96px); }
+/* the deck's closing note (the CTA slide was cut; Results is the ending) */
+.proof-coda {
+  margin-top: 84px;
+  padding-top: 30px;
+  border-top: 1px solid var(--rule-night);
+  font-family: var(--disp);
+  font-weight: 500;
+  font-size: clamp(20px, 2vw, 28px);
+  letter-spacing: -0.015em;
+  color: var(--night-ink);
+}
+.proof-per { font-size: 0.9rem; color: var(--night-body); }
+.proof-product {
+  margin-top: 10px;
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--teal-bright);
+}
+
+/* =========================================================
+   13. ROADMAP (night)
+   ========================================================= */
+.roadmap-list {
+  list-style: none;
+  margin: 60px 0 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 420px));
+  gap: 0 64px;
+}
+.roadmap-list li {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--rule-night);
+}
+.roadmap-list .dmark { margin-top: 9px; background: transparent; border: 1.5px solid var(--teal); width: 9px; height: 9px; }
+.roadmap-list b {
+  display: block;
+  font-family: var(--disp);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--night-ink);
+}
+.roadmap-list span:not(.dmark) { font-size: 0.9rem; color: var(--night-dim); }
+
+/* =========================================================
+   14. CTA (deepest night)
+   ========================================================= */
+.panel-cta { text-align: center; }
+.cta-inner { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+.cta-headline {
+  font-size: clamp(38px, 4.6vw, 68px);
+  max-width: 18ch;
+  line-height: 1.1;
+}
+.cta-sub { font-size: 18px; color: var(--night-body); max-width: 52ch; }
+.cta-pill {
+  position: relative;
+  display: inline-flex; align-items: center;
+  height: 58px;
+  padding: 0 72px 0 30px;
+  border-radius: 999px;
+  background: var(--teal);
+  color: #fff;
+  font-family: var(--disp);
+  font-size: 16px; font-weight: 600;
+  box-shadow: 0 16px 44px rgba(14, 185, 166, 0.32);
+  transition: transform 280ms var(--ease), box-shadow 280ms var(--ease);
+}
+.cta-pill:hover { transform: translateY(-2px); box-shadow: 0 22px 54px rgba(14, 185, 166, 0.42); }
+.cta-arrow {
+  position: absolute; top: 5px; right: 5px;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--night-deep);
+  color: var(--teal-bright);
+  display: grid; place-items: center;
+  transition: transform 280ms var(--ease);
+}
+.cta-arrow svg { width: 18px; height: 18px; }
+.cta-pill:hover .cta-arrow { transform: translateX(3px); }
+.cta-direct {
+  display: flex; align-items: center; gap: 0.8rem;
+  font-size: 0.95rem;
+  color: var(--night-dim);
+}
+.cta-direct a:hover { color: var(--teal-bright); }
+.cta-footer { margin-top: 26px; font-size: 0.82rem; color: var(--night-dim); opacity: 0.8; }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1366px) and (min-width: 961px) {
+  :root { --wrap: min(1140px, calc(100vw - 5.5rem)); }
+}
+@media (max-width: 1100px) {
+  .rail .rail-label { display: none; }
+}
+@media (max-width: 960px) {
+  :root { --wrap: min(1240px, calc(100vw - 2rem)); }
+  .panel { min-height: 0; padding: 5.5rem 0 4rem; }
+  .panel-hero, .panel-purpose, .panel-cta { min-height: 100svh; }
+  .rail { display: none; }
+  .progress-bar { display: block; }
+  .seam { height: 26vh; }
+
+  .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  .hero-media { justify-self: stretch; }
+  .watermark { font-size: 42vw; }
+
+  .timeline { grid-template-columns: 1fr 1fr; gap: 34px 24px; }
+  .timeline::before { display: none; }
+  .tl-beat::before { position: static; display: inline-block; margin-bottom: 10px; }
+  .tl-beat { padding-top: 0; }
+  .stat-row { grid-template-columns: 1fr; gap: 24px; }
+  .problem-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .index-list a { grid-template-columns: 40px 1fr 32px; }
+  .idx-line { display: none; }
+  .journey { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .journey::before { display: none; }
+  .stage > .bezel { width: 100%; }
+  .widget-obj { position: static; width: min(250px, 70%); margin: 20px auto 0; }
+  .stage .stage-cap { margin-top: 20px; }
+  .stage-pair { grid-template-columns: 1fr; }
+  .trio { grid-template-columns: 1fr; gap: 22px; }
+  .product-split { grid-template-columns: 1fr; gap: 44px; }
+  .case-panel { grid-template-columns: 1fr; gap: 30px; padding: 40px 32px; margin-top: 72px; }
+  .numwrap { text-align: left; }
+  .proof-row { grid-template-columns: 1fr 1fr; gap: 34px; }
+  .roadmap-list { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .problem-grid { grid-template-columns: 1fr; }
+  .journey { grid-template-columns: 1fr; }
+  .proof-row { grid-template-columns: 1fr; }
+  .chip img { height: 22px; }
+  .cta-headline { max-width: 100%; }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

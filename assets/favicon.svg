@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <!-- Top teal diamond -->
+  <polygon points="12,3 16,6 12,9 8,6" fill="#0EB9A6"/>
+  <!-- Middle navy diamonds -->
+  <polygon points="8,9 12,12 8,15 4,12" fill="#1D3148"/>
+  <polygon points="16,9 20,12 16,15 12,12" fill="#1D3148"/>
+  <!-- Bottom row: light gray, dark gray, light gray -->
+  <polygon points="4,15 8,18 4,21 0,18" fill="#B0B6BF"/>
+  <polygon points="12,15 16,18 12,21 8,18" fill="#6D7889"/>
+  <polygon points="20,15 24,18 20,21 16,18" fill="#B0B6BF"/>
+</svg>

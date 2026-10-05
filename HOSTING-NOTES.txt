@@ -1,0 +1,8 @@
+Highlands AI Solutions interactive deck. Static site, no build step, no server code.
+
+To host on IONOS:
+1. Upload the CONTENTS of this folder (index.html, styles.css, script.js, assets/) to the target directory via SFTP.
+2. Works at the domain root or any subfolder (all paths are relative).
+3. Nothing else to configure. Fonts and the GSAP animation library load from public CDNs (fonts.googleapis.com, cdn.jsdelivr.net), so the page needs internet access, which any visitor has anyway.
+
+Reference copy running at https://highlands-deck.vercel.app
